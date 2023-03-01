@@ -1,41 +1,28 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-int minimum_cost(int size, int bread[]){
-    int dp[size+1];
-    dp[0] = 0;
-    for(int i=1; i<=size; i++){
-        dp[i] = i;
-        for(int j=0; j<i; j++){
-            if(bread[i]-bread[j] > 0){
-                dp[i] = min(dp[i], dp[j] + i - j);
-            }
+int rod_cutting(int c[], int n) {
+    int r[n+1];
+    r[0] = 0;
+    for(int j=1; j<=n; j++) {
+        int ans = -1;
+        for(int i=1; i<=j; i++) {
+            ans = max(ans, c[i] + r[j-i]);
         }
+        r[j] = ans;
     }
-    return dp[size];
+    return r[n];
 }
-int main()
-{
-    // the cake size
-    cout<<"Enter the bread size"<<endl;
-    int size;
-    cin>>size;
-    int bread[size+1];
-    bread[0] = 0;
-    cout<<"Enter the number of cutpoints"<<endl;
-    int k;
-    cin>>k;
-    cout<<"Enter the cutpoints of bread"<<endl;
-    int cutpoint;
-    for(int i = 1; i <= k; i++){
-        cin>>cutpoint;// saving the index of the cutpoint
-        bread[i] = cutpoint;
+
+int main() {
+    int n;
+    cin >> n;
+    int c[n+1];
+    c[0] = 0;
+    for(int i=1; i<=n; i++) {
+        cin >> c[i];
     }
-    bread[k+1] = size;
-    // taking count of how many cutpoints there are starting from length 0 to i
-    for(int i = 1; i <= k+1; i++){
-        bread[i] += bread[i-1];
-    }
-    int cost = minimum_cost(k+1, bread);
-    cout<<"The minimum_cost"<<" "<<cost<<endl;
+    int max_profit = rod_cutting(c, n);
+    cout << max_profit << endl;
+    return 0;
 }
